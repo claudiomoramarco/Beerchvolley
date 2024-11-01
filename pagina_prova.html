@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Scorekeeper</title>
+
+    <!-- Google Fonts Links -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Micro+5&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="team-info">
+            <div class="team-name" id="team1-name" contenteditable="true">Squadra 1</div>
+            <div class="score-container">
+                <div class="side-boxes">
+                    <div class="secondary-score" id="secondary-score1">12</div>
+                    <div class="birre">BIRRE</div>
+                </div>
+                <div class="main-score" id="score1">12</div>
+            </div>
+            <div class="point-buttons">
+                <button onclick="updateScore('team1', 'N')">N</button>
+                <button onclick="updateScore('team1', 'B')">B</button>
+                <button onclick="updateScore('team1', 'S')">S</button>
+                <button onclick="updateScore('team1', 'W')">W</button>
+            </div>
+        </div>
+
+        <div class="center-column">
+            <div class="switch-button">
+                <button onclick="switchTeams()">SWITCH</button>
+            </div>
+        </div>
+
+        <div class="team-info">
+            <div class="team-name" id="team2-name" contenteditable="true">Squadra 2</div>
+            <div class="score-container">
+                <div class="main-score" id="score2">12</div>
+                <div class="side-boxes">
+                    <div class="secondary-score" id="secondary-score2">56</div>
+                    <div class="birre">BIRRE</div>
+                </div>
+            </div>
+            <div class="point-buttons">
+                <button onclick="updateScore('team2', 'N')">N</button>
+                <button onclick="updateScore('team2', 'B')">B</button>
+                <button onclick="updateScore('team2', 'S')">S</button>
+                <button onclick="updateScore('team2', 'W')">W</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timer Display and Controls at the bottom -->
+    <div class="timer-container">
+        <div class="timer-display" id="time-remaining" contenteditable="true">08:00</div>
+        <div class="timer-controls">
+            <button onclick="startTimer()">START</button>
+            <button onclick="pauseTimer()">PAUSE</button>
+            <button onclick="resetTimer()">RESET</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

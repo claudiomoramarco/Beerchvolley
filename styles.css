@@ -1,0 +1,167 @@
+/* Apply Micro 5 Google Font to the entire page */
+* {
+    box-sizing: border-box;
+    font-family: 'Micro 5', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #B0B0B0; /* Light grey color */
+    color: #ffffff;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    padding: 20px;
+}
+
+.team-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    margin: 0 20px;
+}
+
+.team-name {
+    background-color: #F2C894; /* Sandy color */
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 26px;
+    font-weight: bold;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    color: #333333; /* Darker text for readability */
+}
+
+.score-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.main-score {
+    font-size: 144px; /* Doubled font size */
+    background-color: #1A5276; /* Deep ocean blue */
+    width: 240px; /* Doubled width */
+    text-align: center;
+    padding: 60px; /* Doubled padding */
+    border-radius: 10px;
+    margin: 0 10px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.side-boxes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.secondary-score {
+    font-size: 72px; /* Doubled font size */
+    background-color: #76D7C4; /* Shallow sea green */
+    width: 120px; /* Doubled width */
+    text-align: center;
+    padding: 30px; /* Doubled padding */
+    border-radius: 10px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.birre {
+    font-size: 32px; /* Adjusted for better visibility */
+    background-color: #76D7C4; /* Shallow sea green */
+    width: 120px; /* Same width as secondary score */
+    text-align: center;
+    padding: 30px; /* Same padding as secondary score */
+    border-radius: 10px;
+}
+
+.point-buttons {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.point-buttons button {
+    width: 45px;
+    height: 45px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #2980B9; /* Balanced blue color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+/* Center Column styling for Switch Button */
+.center-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.switch-button {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.switch-button button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #2980B9; /* Balanced blue color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+/* Timer section at the bottom */
+.timer-container {
+    position: absolute;
+    bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.timer-display {
+    font-size: 36px;
+    background-color: #2980B9; /* Balanced blue color */
+    color: #ffffff;
+    width: 140px;
+    text-align: center;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.timer-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.timer-controls button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #2980B9; /* Balanced blue color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
