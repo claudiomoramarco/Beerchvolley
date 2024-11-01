@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurazione Torneo</title>
+    <style>
+        body {
+            background-color: #808080;
+            font-family: 'Micro 5', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        .form-container {
+            max-width: 600px;
+            width: 100%;
+            background-color: rgba(27, 75, 102, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .title {
+            color: white;
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 40px;
+            background-color: #1B4B66;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: white;
+            font-size: 1.1em;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #66CDAA;
+            border-radius: 5px;
+            background-color: rgba(102, 205, 170, 0.1);
+            color: white;
+            font-size: 1em;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1B4B66;
+        }
+
+        .button {
+            background-color: #FFD700;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 30px;
+            text-transform: uppercase;
+        }
+
+        #squadreContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1 class="title">Configurazione Torneo</h1>
+        
+        <form onsubmit="generaCalendario(event)">
+            <div class="form-group">
+                <label for="nomeTorneo">Nome Torneo:</label>
+                <input type="text" id="nomeTorneo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="dataTorneo">Data Torneo:</label>
+                <input type="date" id="dataTorneo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="numSquadre">Numero Squadre:</label>
+                <input type="number" id="numSquadre" min="2" onchange="generaCampiSquadre()" required>
+            </div>
+
+            <div class="form-group">
+                <label for="numCampi">Numero Campi:</label>
+                <input type="number" id="numCampi" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="oraInizio">Ora di Inizio:</label>
+                <input type="time" id="oraInizio" required>
+            </div>
+
+            <div class="form-group">
+                <label for="durataPartita">Durata Partita (minuti):</label>
+                <input type="number" id="durataPartita" min="1" required>
+            </div>
+
+            <div id="squadreContainer">
+                <!-- Qui verranno generati dinamicamente i campi per le squadre -->
+            </div>
+
+            <button type="submit" class="button">Genera Calendario</button>
+        </form>
+    </div>
+
+    <script>
+        function generaCampiSquadre() {
+            const numSquadre = parseInt(document.getElementById('numSquadre').value);
+            const container = document.getElementById('squadreContainer');
+            container.innerHTML = ''; // Pulisce i campi esistenti
+
+            for (let i = 0; i < numSquadre; i++) {
+                container.innerHTML += `
+                    <div class="form-group">
+                        <label for="squadra${i}">Nome Squadra ${i + 1}:</label>
+                        <input type="text" id="squadra${i}" required>
+                    </div>
+                `;
+            }
+        }
+
+        function generaCalendario(event) {
+            event.preventDefault();
+            
+            const numSquadre = parseInt(document.getElementById('numSquadre').value);
+            let squadre = [];
+            
+            // Raccoglie i nomi di tutte le squadre
+            for (let i = 0; i < numSquadre; i++) {
+                squadre.push(document.getElementById(`squadra${i}`).value);
+            }
+
+            // Genera il calendario delle partite
+            const partite = generaPartite(squadre);
+            
+            const datiTorneo = {
+                nome: document.getElementById('nomeTorneo').value,
+                data: document.getElementById('dataTorneo').value,
+                numSquadre: numSquadre,
+                numCampi: document.getElementById('numCampi').value,
+                oraInizio: document.getElementById('oraInizio').value,
+                durataPartita: document.getElementById('durataPartita').value,
+                squadre: squadre,
+                calendario: partite
+            };
+
+            localStorage.setItem('datiTorneo', JSON.stringify(datiTorneo));
+            window.location.href = 'partita.html';
+        }
+
+        function generaPartite(squadre) {
+            let partite = [];
+            let squadreMischiate = [...squadre];
+            
+            // Mischia le squadre in modo casuale
+            for (let i = squadreMischiate.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [squadreMischiate[i], squadreMischiate[j]] = [squadreMischiate[j], squadreMischiate[i]];
+            }
+
+            // Genera tutte le possibili combinazioni di partite
+            for (let i = 0; i < squadreMischiate.length; i++) {
+                for (let j = i + 1; j < squadreMischiate.length; j++) {
+                    partite.push({
+                        squadraCasa: squadreMischiate[i],
+                        squadraOspite: squadreMischiate[j],
+                        orario: null  // L'orario verrà assegnato in base alla disponibilità dei campi
+                    });
+                }
+            }
+
+            return partite;
+        }
+    </script>
+</body>
+</html> 

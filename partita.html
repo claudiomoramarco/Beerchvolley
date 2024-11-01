@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partita in Corso</title>
+    <style>
+        body {
+            background-color: #808080;
+            font-family: 'Micro 5', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .team-info {
+            text-align: center;
+        }
+
+        .main-score {
+            font-size: 8em;
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        /* Colori specifici per ogni squadra */
+        .team1 .main-score {
+            background-color: #66CDAA; /* Verde acqua */
+        }
+
+        .team2 .main-score {
+            background-color: #1B4B66; /* Blu scuro */
+        }
+
+        .secondary-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: inherit;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .birre {
+            font-size: 0.8em;
+            margin-bottom: 5px;
+        }
+
+        .team-name {
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 1.5em;
+        }
+
+        .team1 .team-name {
+            background-color: #66CDAA;
+        }
+
+        .team2 .team-name {
+            background-color: #1B4B66;
+        }
+
+        .point-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .point-buttons button {
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .team1 .point-buttons button {
+            background-color: #66CDAA;
+        }
+
+        .team2 .point-buttons button {
+            background-color: #1B4B66;
+        }
+
+        .timer-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .timer-display {
+            background-color: #FFD700; /* Giallo */
+            color: white;
+            font-size: 3em;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .timer-controls button, .switch-button {
+            background-color: #FFD700;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="info-partita">
+        <h2 id="infoPartita">Campo 1 - 15:00</h2>
+    </div>
+
+    <div class="container">
+        <div class="team-info team1">
+            <div class="secondary-score">
+                <div class="birre">BIRRE</div>
+                <div>12</div>
+            </div>
+            <div class="main-score">12</div>
+            <div class="team-name">Squadra 1</div>
+            <div class="point-buttons">
+                <button>N</button>
+                <button>B</button>
+                <button>S</button>
+                <button>W</button>
+            </div>
+        </div>
+
+        <div class="team-info team2">
+            <div class="secondary-score">
+                <div class="birre">BIRRE</div>
+                <div>56</div>
+            </div>
+            <div class="main-score">30</div>
+            <div class="team-name">Squadra 2</div>
+            <div class="point-buttons">
+                <button>N</button>
+                <button>B</button>
+                <button>S</button>
+                <button>W</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="timer-container">
+        <button class="switch-button">SWITCH</button>
+        <div class="timer-display">08:00</div>
+        <div class="timer-controls">
+            <button>START</button>
+            <button>PAUSE</button>
+            <button>RESET</button>
+        </div>
+    </div>
+
+    <div class="navigation-buttons">
+        <button onclick="terminaPartita()">Termina Partita</button>
+        <button onclick="tornaAlCalendario()">Torna al Calendario</button>
+    </div>
+
+    <script>
+        let partitaCorrente;
+        let timer;
+        let timeLeft;
+        let isTimerRunning = false;
+
+        window.onload = function() {
+            // Carica i dati della partita
+            partitaCorrente = JSON.parse(localStorage.getItem('partitaCorrente'));
+            
+            // Imposta i nomi delle squadre
+            document.getElementById('team1-name').textContent = partitaCorrente.squadraCasa;
+            document.getElementById('team2-name').textContent = partitaCorrente.squadraOspite;
+            
+            // Imposta le informazioni della partita
+            document.getElementById('infoPartita').textContent = 
+                `Campo ${partitaCorrente.campo} - ${partitaCorrente.orario}`;
+
+            // Imposta il timer
+            resetTimer();
+        };
+
+        function updateScore(team, type) {
+            const scoreElement = document.getElementById(`score${team === 'team1' ? '1' : '2'}`);
+            const beerElement = document.getElementById(`secondary-score${team === 'team1' ? '1' : '2'}`);
+            let currentScore = parseInt(scoreElement.textContent);
+            let currentBeers = parseInt(beerElement.textContent);
+
+            switch(type) {
+                case 'N':
+                    scoreElement.textContent = currentScore + 1;
+                    break;
+                case 'B':
+                    scoreElement.textContent = currentScore + 1;
+                    beerElement.textContent = currentBeers + 1;
+                    break;
+                case 'S':
+                    scoreElement.textContent = currentScore + 2;
+                    break;
+                case 'W':
+                    scoreElement.textContent = 21;
+                    break;
+            }
+        }
+
+        function switchTeams() {
+            const team1Name = document.getElementById('team1-name').textContent;
+            const team1Score = document.getElementById('score1').textContent;
+            const team1Beers = document.getElementById('secondary-score1').textContent;
+
+            document.getElementById('team1-name').textContent = document.getElementById('team2-name').textContent;
+            document.getElementById('score1').textContent = document.getElementById('score2').textContent;
+            document.getElementById('secondary-score1').textContent = document.getElementById('secondary-score2').textContent;
+
+            document.getElementById('team2-name').textContent = team1Name;
+            document.getElementById('score2').textContent = team1Score;
+            document.getElementById('secondary-score2').textContent = team1Beers;
+        }
+
+        function startTimer() {
+            if (!isTimerRunning) {
+                isTimerRunning = true;
+                timer = setInterval(updateTimer, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            isTimerRunning = false;
+            clearInterval(timer);
+        }
+
+        function resetTimer() {
+            timeLeft = 8 * 60; // 8 minuti in secondi
+            updateTimerDisplay();
+            pauseTimer();
+        }
+
+        function updateTimer() {
+            if (timeLeft > 0) {
+                timeLeft--;
+                updateTimerDisplay();
+            } else {
+                pauseTimer();
+            }
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('time-remaining').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function terminaPartita() {
+            // Salva il risultato
+            const risultato = {
+                ...partitaCorrente,
+                punteggioCasa: document.getElementById('score1').textContent,
+                punteggioOspite: document.getElementById('score2').textContent,
+                birreCasa: document.getElementById('secondary-score1').textContent,
+                birreOspite: document.getElementById('secondary-score2').textContent
+            };
+
+            // Salva il risultato in localStorage
+            let risultati = JSON.parse(localStorage.getItem('risultatiPartite')) || [];
+            risultati.push(risultato);
+            localStorage.setItem('risultatiPartite', JSON.stringify(risultati));
+
+            // Torna al calendario
+            window.location.href = 'pagina_prova.html';
+        }
+
+        function tornaAlCalendario() {
+            window.location.href = 'pagina_prova.html';
+        }
+    </script>
+</body>
+</html> 

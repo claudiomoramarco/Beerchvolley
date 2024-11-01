@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benvenuto</title>
+    <style>
+        body {
+            background-color: #808080;
+            font-family: 'Micro 5', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .logo-container {
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            width: 200px;
+            height: 200px;
+            background-color: #66CDAA;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            color: white;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 300px;
+        }
+
+        .button {
+            background-color: #1B4B66;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .button.secondary {
+            background-color: #66CDAA;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <div class="logo">LOGO</div>
+    </div>
+
+    <div class="button-container">
+        <button class="button" onclick="window.location.href='registrazione.html'">Registrati</button>
+        <button class="button secondary" onclick="window.location.href='index.html'">Continua senza registrazione</button>
+    </div>
+</body>
+</html> 

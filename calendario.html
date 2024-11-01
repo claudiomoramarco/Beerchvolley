@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Torneo</title>
+    <style>
+        body {
+            background-color: #808080;
+            font-family: 'Micro 5', sans-serif;
+            color: white;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: #1B4B66;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .info-torneo {
+            background-color: rgba(102, 205, 170, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .calendario {
+            display: grid;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .partita {
+            background-color: rgba(27, 75, 102, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .vs {
+            font-size: 1.2em;
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .campo-info {
+            background-color: #66CDAA;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+
+        .orario {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .squadra-casa { text-align: right; }
+        .squadra-ospite { text-align: left; }
+
+        .avvia-button {
+            background-color: #FFD700;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .avvia-button:hover {
+            background-color: #FFC700;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 id="nomeTorneo">Nome Torneo</h1>
+    </div>
+
+    <div class="info-torneo">
+        <h3>Informazioni Torneo</h3>
+        <p>Data: <span id="dataTorneo"></span></p>
+        <p>Numero squadre: <span id="numSquadre"></span></p>
+        <p>Numero campi: <span id="numCampi"></span></p>
+        <p>Ora inizio: <span id="oraInizio"></span></p>
+        <p>Durata partite: <span id="durataPartita"></span> minuti</p>
+    </div>
+
+    <div id="calendario" class="calendario">
+        <!-- Le partite verranno inserite qui dinamicamente -->
+    </div>
+
+    <script>
+        let datiTorneo;
+        let partiteConOrari;
+
+        window.onload = function() {
+            datiTorneo = JSON.parse(localStorage.getItem('datiTorneo'));
+            
+            // Popola le informazioni del torneo
+            document.getElementById('nomeTorneo').textContent = datiTorneo.nome;
+            document.getElementById('dataTorneo').textContent = datiTorneo.data;
+            document.getElementById('numSquadre').textContent = datiTorneo.numSquadre;
+            document.getElementById('numCampi').textContent = datiTorneo.numCampi;
+            document.getElementById('oraInizio').textContent = datiTorneo.oraInizio;
+            document.getElementById('durataPartita').textContent = datiTorneo.durataPartita;
+
+            // Assegna orari e campi alle partite
+            partiteConOrari = assegnaOrariECampi(datiTorneo.calendario, 
+                                                datiTorneo.oraInizio, 
+                                                datiTorneo.durataPartita, 
+                                                datiTorneo.numCampi);
+
+            // Visualizza il calendario
+            visualizzaCalendario(partiteConOrari);
+        };
+
+        function visualizzaCalendario(partite) {
+            const container = document.getElementById('calendario');
+            container.innerHTML = '';
+
+            partite.forEach((partita, index) => {
+                container.innerHTML += `
+                    <div class="partita">
+                        <div class="squadra-casa">${partita.squadraCasa}</div>
+                        <div class="vs">VS</div>
+                        <div class="squadra-ospite">${partita.squadraOspite}</div>
+                        <div class="campo-info">Campo ${partita.campo}</div>
+                        <div class="orario">${partita.orario}</div>
+                        <button class="avvia-button" onclick="avviaPartita(${index})">Avvia Partita</button>
+                    </div>
+                `;
+            });
+        }
+
+        function avviaPartita(index) {
+            // Salva i dati della partita selezionata
+            localStorage.setItem('partitaCorrente', JSON.stringify(partiteConOrari[index]));
+            // Reindirizza alla pagina della partita
+            window.location.href = 'partita.html';
+        }
+    </script>
+</body>
+</html> 
